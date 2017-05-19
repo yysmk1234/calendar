@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Date</title>
+    <link href="css/clear.css" rel="stylesheet">
+    <style type="text/css">
+        .clearfix:before,.clearfix:after{
+            content: "";
+            display: table;
+        }
+        .clearfix:after{
+            clear: both;
+        }
+        .clearfix{
+            *zoom: 1;
+        }
+        .date-box{
+            padding: 10px;
+            margin: 200px auto;
+            width: 315px;
+            border: 1px solid #333;
+            border-radius: 5px;
+        }
+        .date{
+            width:315px;
+            border-radius: 5px;
+            border: 1px solid #333;
+        }
+        .date{
+            border-collapse: collapse;
+        }
+        .date td{
+            border: 1px solid #333;
+            width: 45px;
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="date-box">
+        <table class="date">
+            <tr>
+                <td>周日</td>
+                <td>周一</td>
+                <td>周二</td>
+                <td>周三</td>
+                <td>周四</td>
+                <td>周五</td>
+                <td>周六</td>
+            </tr>
+        </table>
+    </div>
+</body>
+    <script>
+        /**
+        * 判断年份是不是闰年
+        * */
+        function isLeapYear(year){
+            return (year % 400 == 0)||(year % 4 == 0 && year % 100 != 0 )
+        }
+        /**
+        * 创建月份数组
+        * */
+        function getMonthDay(year,month){
+            return [31,null,31,30,31,30,31,31,30,31,30,31][month]||(isLeapYear(year)?29:28)
+        }
+        var today = new Date();
+        var weekDay = today.getDay();   //判断当天是星期几，周日为0，依次增加到6为周六
+        var year = today.getFullYear();  //获取年份
+
+
+        console.log(year);
+    </script>
+</html>
