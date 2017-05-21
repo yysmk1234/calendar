@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Date</title>
     <link href="css/clear.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
     <style type="text/css">
         .clearfix:before,.clearfix:after{
             content: "";
@@ -23,6 +24,7 @@
             border-radius: 5px;
         }
         .date{
+            margin-top: 10px;
             width:315px;
             border-radius: 5px;
             border: 1px solid #333;
@@ -41,37 +43,94 @@
 </head>
 <body>
     <div class="date-box">
+        <label>选择年份：</label>
+        <select id="choose_year">
+            <option>2016</option>
+            <option>2017</option>
+            <option>2018</option>
+            <option>2019</option>
+        </select>
+        <label>选择月份：</label>
+        <select id="choose_month">
+            <option value="1">1月</option>
+            <option value="2">2月</option>
+            <option value="3">3月</option>
+            <option value="4">4月</option>
+            <option value="5">5月</option>
+            <option value="6">6月</option>
+            <option value="7">7月</option>
+            <option value="8">8月</option>
+            <option value="9">9月</option>
+            <option value="10">10月</option>
+            <option value="11">11月</option>
+            <option value="12">12月</option>
+        </select>
         <table class="date">
-            <tr>
-                <td>周日</td>
-                <td>周一</td>
-                <td>周二</td>
-                <td>周三</td>
-                <td>周四</td>
-                <td>周五</td>
-                <td>周六</td>
-            </tr>
+
         </table>
     </div>
 </body>
     <script>
-        /**
-        * 判断年份是不是闰年
-        * */
-        function isLeapYear(year){
-            return (year % 400 == 0)||(year % 4 == 0 && year % 100 != 0 )
-        }
-        /**
-        * 创建月份数组
-        * */
-        function getMonthDay(year,month){
-            return [31,null,31,30,31,30,31,31,30,31,30,31][month]||(isLeapYear(year)?29:28)
-        }
-        var today = new Date();
-        var weekDay = today.getDay();   //判断当天是星期几，周日为0，依次增加到6为周六
-        var year = today.getFullYear();  //获取年份
+        (function(){
+            /**
+             * 判断年份是不是闰年
+             * */
+            function isLeapYear(year){
+                return (year % 400 == 0)||(year % 4 == 0 && year % 100 != 0 )
+            }
+            /**
+             * 创建月份数组
+             * */
+            function getMonthDay(year,month){
+                return [31,null,31,30,31,30,31,31,30,31,30,31][month]||(isLeapYear(year)?29:28)
+            }
 
+            var today = new Date(2017,4,1);
+            var weekDay = today.getDay();   //判断当天是星期几，周日为0，依次增加到6为周六
+            var year = today.getFullYear();  //获取年份
+            console.log(weekDay);
 
-        console.log(year);
+            /**
+            * 绘制demo
+            * */
+            function creat_element(arg){
+                var day = new Date(arg.year,arg.month);
+                /**
+                 * 确定行数
+                 * */
+                var tr_num = Math.ceil((day.getDay()+getMonthDay(arg.year,arg.month))/7)
+//                console.log(tr_num);
+                var str = "<tr>"+
+                        "<td>"+"周日"+"</td>"+
+                        "<td>"+"周一"+"</td>"+
+                        "<td>"+"周二"+"</td>"+
+                        "<td>"+"周三"+"</td>"+
+                        "<td>"+"周四"+"</td>"+
+                        "<td>"+"周五"+"</td>"+
+                        "<td>"+"周六"+"</td>"+
+                        "</tr>";
+
+                $('.date').empty();
+                for(var i = 0; i < tr_num ; i++ ){
+                    str +="<tr>";
+                    for (var k = 0 ; k < 7 ; k++){
+                        var index = i * 7 + k;   //创建表格索引
+                        var date = index - day.getDay() + 1;  //和每月的一号匹配
+                        (date<=0||date>getMonthDay(arg.year,arg.month))?str += '<td></td>':str += '<td>'+date+'</td>'
+                    }
+                    str +="</tr>";
+                }
+                $('.date').append(str);
+            }
+            $('#choose_year,#choose_month').change(function(){
+                var arg_choose = {
+                    year:$('#choose_year').children('option:selected').text(),
+                    month:$('#choose_month').children('option:selected').val()-1
+                }
+                creat_element(arg_choose);
+            });
+            creat_element({year:today.getFullYear(),month:today.getMonth()})
+            
+        })()
     </script>
 </html>
