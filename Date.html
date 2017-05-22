@@ -39,16 +39,19 @@
             line-height: 45px;
             text-align: center;
         }
+        .can_c{
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="date-box">
         <label>选择年份：</label>
         <select id="choose_year">
-            <option>2016</option>
-            <option>2017</option>
-            <option>2018</option>
-            <option>2019</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
         </select>
         <label>选择月份：</label>
         <select id="choose_month">
@@ -85,9 +88,11 @@
                 return [31,null,31,30,31,30,31,31,30,31,30,31][month]||(isLeapYear(year)?29:28)
             }
 
-            var today = new Date(2017,4,1);
-            var weekDay = today.getDay();   //判断当天是星期几，周日为0，依次增加到6为周六
+            var today = new Date();
+            var weekDay = today.getDay();   //判断1号是星期几，周日为0，依次增加到6为周六
             var year = today.getFullYear();  //获取年份
+            var month = today.getMonth()+1;
+            var day = today.getDate();
             console.log(weekDay);
 
             /**
@@ -116,7 +121,7 @@
                     for (var k = 0 ; k < 7 ; k++){
                         var index = i * 7 + k;   //创建表格索引
                         var date = index - day.getDay() + 1;  //和每月的一号匹配
-                        (date<=0||date>getMonthDay(arg.year,arg.month))?str += '<td></td>':str += '<td>'+date+'</td>'
+                        (date<=0||date>getMonthDay(arg.year,arg.month))?str += '<td></td>':str += '<td class="can_c">'+date+'</td>'
                     }
                     str +="</tr>";
                 }
@@ -129,8 +134,19 @@
                 }
                 creat_element(arg_choose);
             });
-            creat_element({year:today.getFullYear(),month:today.getMonth()})
-            
+            $(document).on("click",'.can_c',function(){
+                var year = $('#choose_year').val();
+                var month = $('#choose_month').val();
+               var this_day = $(this).text();
+                alert(year+"年"+month+"月"+this_day+"日");
+            });
+
+
+            creat_element({year:today.getFullYear(),month:today.getMonth()});
+            $('#choose_month option[value='+month+']').attr("selected","true");
+            $('#choose_year option[value='+year+']').attr("selected","true");
+            var today_day = day+7+weekDay-1;
+            $('.date td:eq('+today_day+')').css("background","red");
         })()
     </script>
 </html>
